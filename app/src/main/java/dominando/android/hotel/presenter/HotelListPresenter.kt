@@ -1,6 +1,6 @@
 package dominando.android.hotel.presenter
 
-import dominando.android.hotel.HotelListView
+import dominando.android.hotel.Interfaces.HotelListView
 import dominando.android.hotel.model.Hotel
 import dominando.android.hotel.repository.HotelRepository
 

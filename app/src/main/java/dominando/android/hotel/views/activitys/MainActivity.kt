@@ -1,4 +1,4 @@
-package dominando.android.hotel.views
+package dominando.android.hotel.views.activitys
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

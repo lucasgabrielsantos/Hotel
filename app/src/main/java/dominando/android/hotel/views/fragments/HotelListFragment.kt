@@ -1,14 +1,15 @@
-package dominando.android.hotel.views
+package dominando.android.hotel.views.fragments
 
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.fragment.app.ListFragment
-import dominando.android.hotel.HotelListView
+import dominando.android.hotel.Interfaces.HotelListView
 import dominando.android.hotel.model.Hotel
 import dominando.android.hotel.presenter.HotelListPresenter
 import dominando.android.hotel.utils.MemoryRepository
 
-class HotelListFragment : ListFragment(), HotelListView {
+class HotelListFragment : ListFragment(),
+    HotelListView {
     private val presenter = HotelListPresenter(
         this@HotelListFragment,
         MemoryRepository
