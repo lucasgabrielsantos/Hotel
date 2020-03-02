@@ -8,16 +8,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import dominando.android.hotel.R
 import dominando.android.hotel.model.Hotel
+import dominando.android.hotel.views.fragments.AboutDialogFragment
 import dominando.android.hotel.views.fragments.HotelDetailsFragment
 import dominando.android.hotel.views.fragments.HotelListFragment
 
 class HotelActivity : AppCompatActivity(),
-    HotelListFragment.OnHotelClickListener, SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
+    HotelListFragment.OnHotelClickListener, SearchView.OnQueryTextListener,
+    MenuItem.OnActionExpandListener {
 
-    private var lastSearchTerm : String = ""
-    private var searchView : SearchView? = null
+    private var lastSearchTerm: String = ""
+    private var searchView: SearchView? = null
 
-    private val listFragment : HotelListFragment by lazy {
+    private val listFragment: HotelListFragment by lazy {
         supportFragmentManager.findFragmentById(R.id.fragmentList) as HotelListFragment
     }
 
@@ -25,6 +27,9 @@ class HotelActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hotel)
     }
+
+    private fun isTablet() = resources.getBoolean(R.bool.tablet)
+    private fun isSmartphone() = resources.getBoolean(R.bool.smartphone)
 
     override fun onHotelClick(hotel: Hotel) {
 
@@ -56,7 +61,7 @@ class HotelActivity : AppCompatActivity(),
         searchView?.queryHint = getString(R.string.hint_search)
         searchView?.setOnQueryTextListener(this)
 
-        if (lastSearchTerm.isNotEmpty()){
+        if (lastSearchTerm.isNotEmpty()) {
             Handler().post {
                 val query = lastSearchTerm
                 searchItem.expandActionView()
@@ -66,10 +71,6 @@ class HotelActivity : AppCompatActivity(),
         }
         return true
     }
-
-    private fun isTablet() = resources.getBoolean(R.bool.tablet)
-    private fun isSmartphone() = resources.getBoolean(R.bool.smartphone)
-
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
@@ -82,6 +83,10 @@ class HotelActivity : AppCompatActivity(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item?.itemId) {
+            R.id.action_info ->
+                AboutDialogFragment().show(supportFragmentManager, "sobre")
+        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -103,7 +108,7 @@ class HotelActivity : AppCompatActivity(),
     }
 
 
-    companion object{
+    companion object {
 
         const val EXTRA_SEARCH_TERM = "lastSearch"
     }

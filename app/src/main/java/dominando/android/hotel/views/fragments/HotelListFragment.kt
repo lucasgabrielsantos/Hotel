@@ -3,6 +3,7 @@ package dominando.android.hotel.views.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.ListView
 import androidx.fragment.app.ListFragment
 import dominando.android.hotel.Interfaces.HotelListView
@@ -45,6 +46,14 @@ class HotelListFragment : ListFragment(),
 
     interface  OnHotelClickListener{
         fun onHotelClick(hotel: Hotel)
+    }
+
+    fun search(text: String){
+        presenter.searchHotels(text)
+    }
+
+    fun clearSearch(){
+        presenter.searchHotels("")
     }
 
 }
