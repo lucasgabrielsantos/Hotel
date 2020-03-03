@@ -19,6 +19,7 @@ class HotelActivity : AppCompatActivity(),
 
     private var lastSearchTerm: String = ""
     private var searchView: SearchView? = null
+    private var hotelIdSelected: Long = -1
 
     private val listFragment: HotelListFragment by lazy {
         supportFragmentManager.findFragmentById(R.id.fragmentList) as HotelListFragment
@@ -35,6 +36,7 @@ class HotelActivity : AppCompatActivity(),
     override fun onHotelClick(hotel: Hotel) {
 
         if (isTablet()) {
+            hotelIdSelected = hotel.id
             showDetailsFragment(hotel.id)
         } else {
             showDetailsActivity(hotel.id)
@@ -76,11 +78,13 @@ class HotelActivity : AppCompatActivity(),
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         lastSearchTerm = savedInstanceState?.getString(EXTRA_SEARCH_TERM) ?: ""
+        hotelIdSelected = savedInstanceState?.getLong(EXTRA_HOTEL_ID_SELECTED) ?: 0
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState?.putString(EXTRA_SEARCH_TERM, lastSearchTerm)
+        outState?.putLong(EXTRA_SEARCH_TERM, hotelIdSelected)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -114,9 +118,12 @@ class HotelActivity : AppCompatActivity(),
     companion object {
 
         const val EXTRA_SEARCH_TERM = "lastSearch"
+        const val EXTRA_HOTEL_ID_SELECTED = "lastSelectedId"
     }
 
     override fun onHotelSaved(hotel: Hotel) {
         listFragment.search(lastSearchTerm)
     }
+
+
 }
