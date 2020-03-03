@@ -9,11 +9,13 @@ import dominando.android.hotel.Interfaces.HotelDetailsView
 import dominando.android.hotel.R
 import dominando.android.hotel.model.Hotel
 import dominando.android.hotel.presenter.HotelDetailsPresenter
-import dominando.android.hotel.utils.MemoryRepository
+import dominando.android.hotel.repository.MemoryRepository
 import kotlinx.android.synthetic.main.fragment_hotel_details.*
 
 class HotelDetailsFragment : Fragment(), HotelDetailsView {
-    private val presenter = HotelDetailsPresenter(this@HotelDetailsFragment, MemoryRepository)
+    private val presenter = HotelDetailsPresenter(this@HotelDetailsFragment,
+        MemoryRepository
+    )
     private var hotel: Hotel? = null
 
     override fun onCreateView(

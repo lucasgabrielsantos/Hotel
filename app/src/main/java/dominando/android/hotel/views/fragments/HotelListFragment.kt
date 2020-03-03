@@ -3,18 +3,18 @@ package dominando.android.hotel.views.fragments
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import android.widget.ListView
 import androidx.fragment.app.ListFragment
 import dominando.android.hotel.Interfaces.HotelListView
 import dominando.android.hotel.model.Hotel
 import dominando.android.hotel.presenter.HotelListPresenter
-import dominando.android.hotel.utils.MemoryRepository
+import dominando.android.hotel.repository.MemoryRepository
 
 class HotelListFragment : ListFragment(),
     HotelListView {
     private val presenter = HotelListPresenter(
-        this@HotelListFragment, MemoryRepository
+        this@HotelListFragment,
+        MemoryRepository
     )
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -8,4 +8,8 @@
     <string name="about_title">Dominando o Android</string>
     <string name="about_message">Desenvolvido por Lucas G</string>
     <string name="about_button_site">Site</string>
+    <string name="form_label_name">Nome</string>
+    <string name="form_label_address">Endereço</string>
+    <string name="form_label_rating">Classificação</string>
+    <string name="error_invalid_hotel">Hotel inválido, digite novamente</string>
 </resources>

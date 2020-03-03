@@ -1,6 +1,5 @@
-package dominando.android.hotel.utils
+package dominando.android.hotel.repository
 
-import dominando.android.hotel.repository.HotelRepository
 import dominando.android.hotel.model.Hotel
 
 object MemoryRepository : HotelRepository {
