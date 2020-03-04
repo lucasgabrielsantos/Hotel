@@ -13,6 +13,9 @@
     <string name="form_label_rating">Classificação</string>
     <string name="error_invalid_hotel">Hotel inválido, digite novamente</string>
     <string name="action_delete">Excluir</string>
+    <string name="message_hotels_deleted">%d Itens excluídos</string>
+    <string name="undo">Desfazer</string>
+
 
     <plurals name="list_hotel_selected">
         <item quantity="one">1 selecionado</item>

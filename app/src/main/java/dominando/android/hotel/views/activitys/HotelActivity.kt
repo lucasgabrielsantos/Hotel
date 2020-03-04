@@ -12,6 +12,7 @@ import dominando.android.hotel.views.fragments.AboutDialogFragment
 import dominando.android.hotel.views.fragments.HotelDetailsFragment
 import dominando.android.hotel.views.fragments.HotelFormFragment
 import dominando.android.hotel.views.fragments.HotelListFragment
+import kotlinx.android.synthetic.main.activity_hotel.*
 
 class HotelActivity : AppCompatActivity(),
     HotelListFragment.OnHotelClickListener, SearchView.OnQueryTextListener,
@@ -28,6 +29,11 @@ class HotelActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hotel)
+
+        fabAdd.setOnClickListener{
+            listFragment.hideDeleteMode()
+            HotelFormFragment().newInstance().open(supportFragmentManager)
+        }
     }
 
     private fun isTablet() = resources.getBoolean(R.bool.tablet)
@@ -77,22 +83,20 @@ class HotelActivity : AppCompatActivity(),
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        lastSearchTerm = savedInstanceState?.getString(EXTRA_SEARCH_TERM) ?: ""
-        hotelIdSelected = savedInstanceState?.getLong(EXTRA_HOTEL_ID_SELECTED) ?: 0
+        lastSearchTerm = savedInstanceState.getString(EXTRA_SEARCH_TERM) ?: ""
+        hotelIdSelected = savedInstanceState.getLong(EXTRA_HOTEL_ID_SELECTED)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState?.putString(EXTRA_SEARCH_TERM, lastSearchTerm)
-        outState?.putLong(EXTRA_SEARCH_TERM, hotelIdSelected)
+        outState.putString(EXTRA_SEARCH_TERM, lastSearchTerm)
+        outState.putLong(EXTRA_SEARCH_TERM, hotelIdSelected)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item?.itemId) {
+        when (item.itemId) {
             R.id.action_info ->
                 AboutDialogFragment().show(supportFragmentManager, "sobre")
-            R.id.action_new ->
-                HotelFormFragment().newInstance().open(supportFragmentManager)
         }
         return super.onOptionsItemSelected(item)
     }

@@ -10,6 +10,7 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.ListFragment
+import com.google.android.material.snackbar.Snackbar
 import dominando.android.hotel.Interfaces.HotelListView
 import dominando.android.hotel.R
 import dominando.android.hotel.model.Hotel
@@ -24,7 +25,7 @@ class HotelListFragment : ListFragment(),
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        presenter.searchHotels("")
+        presenter.init()
         listView.onItemLongClickListener = this
     }
 
@@ -137,9 +138,15 @@ class HotelListFragment : ListFragment(),
         presenter.hideDeleteMode()
     }
 
-    interface OnHotelDeletedListener{
+    interface OnHotelDeletedListener {
         fun onHotelsDeleted(hotels: List<Hotel>)
-}
+    }
 
-
+    override fun showMessageHotelsDeleted(count: Int) {
+        Snackbar.make(listView,
+            getString(R.string.message_hotels_deleted, count),
+            Snackbar.LENGTH_LONG)
+            .setAction(R.string.undo) { presenter.undoDelete()
+            }.show()
+    }
 }

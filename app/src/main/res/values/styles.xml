@@ -15,5 +15,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <color name="ActionMode">#79cb98</color>
+<color name="ActionMode">@android:color/darker_gray</color>
+
 </resources>
