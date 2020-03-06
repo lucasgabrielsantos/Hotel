@@ -1,11 +1,10 @@
-package dominando.android.hotel.views.activitys
+package dominando.android.hotel.details
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dominando.android.hotel.R
-import dominando.android.hotel.views.fragments.HotelDetailsFragment
 
 class HotelDetailsActivity : AppCompatActivity() {
     private val hotelId: Long by lazy { intent.getLongExtra(EXTRA_HOTEL_ID, -1) }

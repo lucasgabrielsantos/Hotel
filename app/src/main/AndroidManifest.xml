@@ -10,10 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".views.activitys.HotelDetailsActivity"
-            android:parentActivityName=".views.activitys.HotelActivity"></activity>
+            android:name=".details.HotelDetailsActivity"
+            android:parentActivityName=".common.HotelActivity"></activity>
         <activity
-            android:name=".views.activitys.HotelActivity"
+            android:name=".common.HotelActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

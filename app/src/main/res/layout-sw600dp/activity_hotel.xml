@@ -9,7 +9,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:name="dominando.android.hotel.views.fragments.HotelListFragment"
+        android:name="dominando.android.hotel.list.HotelListFragment"
         android:id="@+id/fragmentList"/>
 
     <FrameLayout

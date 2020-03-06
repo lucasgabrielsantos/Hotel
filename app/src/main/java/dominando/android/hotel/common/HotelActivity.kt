@@ -1,4 +1,4 @@
-package dominando.android.hotel.views.activitys
+package dominando.android.hotel.common
 
 import android.os.Bundle
 import android.os.Handler
@@ -8,10 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import dominando.android.hotel.R
 import dominando.android.hotel.model.Hotel
-import dominando.android.hotel.views.fragments.AboutDialogFragment
-import dominando.android.hotel.views.fragments.HotelDetailsFragment
-import dominando.android.hotel.views.fragments.HotelFormFragment
-import dominando.android.hotel.views.fragments.HotelListFragment
+import dominando.android.hotel.details.HotelDetailsFragment
+import dominando.android.hotel.form.HotelFormFragment
+import dominando.android.hotel.details.HotelDetailsActivity
+import dominando.android.hotel.list.HotelListFragment
 import kotlinx.android.synthetic.main.activity_hotel.*
 
 class HotelActivity : AppCompatActivity(),
@@ -50,7 +50,10 @@ class HotelActivity : AppCompatActivity(),
     }
 
     private fun showDetailsActivity(hotelId: Long) {
-        HotelDetailsActivity.open(this, hotelId)
+        HotelDetailsActivity.open(
+            this,
+            hotelId
+        )
     }
 
     private fun showDetailsFragment(hotelId: Long) {

@@ -1,4 +1,4 @@
-package dominando.android.hotel.views.fragments
+package dominando.android.hotel.list
 
 import android.os.Bundle
 import android.view.Menu
@@ -11,16 +11,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.ListFragment
 import com.google.android.material.snackbar.Snackbar
-import dominando.android.hotel.Interfaces.HotelListView
 import dominando.android.hotel.R
 import dominando.android.hotel.model.Hotel
-import dominando.android.hotel.presenter.HotelListPresenter
-import dominando.android.hotel.repository.MemoryRepository
+import dominando.android.hotel.repository.memory.MemoryRepository
 
 class HotelListFragment : ListFragment(),
     HotelListView, AdapterView.OnItemLongClickListener, ActionMode.Callback {
 
-    private val presenter = HotelListPresenter(this@HotelListFragment, MemoryRepository)
+    private val presenter = HotelListPresenter(
+        this@HotelListFragment,
+        MemoryRepository
+    )
     private var actionMode: ActionMode? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

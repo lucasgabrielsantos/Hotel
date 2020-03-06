@@ -1,9 +1,7 @@
-package dominando.android.hotel.presenter
+package dominando.android.hotel.form
 
-import dominando.android.hotel.Interfaces.HotelFormView
 import dominando.android.hotel.model.Hotel
 import dominando.android.hotel.repository.HotelRepository
-import dominando.android.hotel.utils.HotelValidator
 
 class HotelFormPresenter(
     private val view: HotelFormView,

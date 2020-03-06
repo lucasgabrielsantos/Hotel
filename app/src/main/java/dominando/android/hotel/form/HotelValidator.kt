@@ -1,4 +1,4 @@
-package dominando.android.hotel.utils
+package dominando.android.hotel.form
 
 import dominando.android.hotel.model.Hotel
 

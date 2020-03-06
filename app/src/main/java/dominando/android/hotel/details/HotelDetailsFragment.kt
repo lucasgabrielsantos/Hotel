@@ -1,4 +1,4 @@
-package dominando.android.hotel.views.fragments
+package dominando.android.hotel.details
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,17 +6,18 @@ import android.view.*
 import androidx.appcompat.widget.ShareActionProvider
 import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
-import dominando.android.hotel.Interfaces.HotelDetailsView
 import dominando.android.hotel.R
 import dominando.android.hotel.model.Hotel
-import dominando.android.hotel.presenter.HotelDetailsPresenter
-import dominando.android.hotel.repository.MemoryRepository
+import dominando.android.hotel.repository.memory.MemoryRepository
 import kotlinx.android.synthetic.main.fragment_hotel_details.*
 
-class HotelDetailsFragment : Fragment(), HotelDetailsView {
-    private val presenter = HotelDetailsPresenter(this@HotelDetailsFragment,
-        MemoryRepository
-    )
+class HotelDetailsFragment : Fragment(),
+    HotelDetailsView {
+    private val presenter =
+        HotelDetailsPresenter(
+            this@HotelDetailsFragment,
+            MemoryRepository
+        )
     private var hotel: Hotel? = null
     private var shareActionProvider: ShareActionProvider? = null
 

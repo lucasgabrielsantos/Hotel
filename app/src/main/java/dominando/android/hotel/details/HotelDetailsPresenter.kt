@@ -1,6 +1,5 @@
-package dominando.android.hotel.presenter
+package dominando.android.hotel.details
 
-import dominando.android.hotel.Interfaces.HotelDetailsView
 import dominando.android.hotel.repository.HotelRepository
 
 class HotelDetailsPresenter(

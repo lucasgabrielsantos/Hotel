@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="dominando.android.hotel.views.activitys.HotelActivity">
+    tools:context="dominando.android.hotel.common.HotelActivity">
 
     <item
         android:id="@+id/action_search"

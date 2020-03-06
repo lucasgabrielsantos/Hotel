@@ -1,4 +1,4 @@
-package dominando.android.hotel.views.fragments
+package dominando.android.hotel.common
 
 import android.app.AlertDialog
 import android.app.Dialog

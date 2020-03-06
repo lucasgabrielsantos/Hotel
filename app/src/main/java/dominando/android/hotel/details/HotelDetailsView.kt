@@ -1,4 +1,4 @@
-package dominando.android.hotel.Interfaces
+package dominando.android.hotel.details
 
 import dominando.android.hotel.model.Hotel
 

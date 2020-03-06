@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/fragmentList"
-        android:name="dominando.android.hotel.views.fragments.HotelListFragment"
+        android:name="dominando.android.hotel.list.HotelListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

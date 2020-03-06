@@ -1,4 +1,4 @@
-package dominando.android.hotel.views.fragments
+package dominando.android.hotel.form
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,15 +9,17 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import dominando.android.hotel.Interfaces.HotelFormView
 import dominando.android.hotel.R
 import dominando.android.hotel.model.Hotel
-import dominando.android.hotel.presenter.HotelFormPresenter
-import dominando.android.hotel.repository.MemoryRepository
+import dominando.android.hotel.repository.memory.MemoryRepository
+import dominando.android.hotel.list.HotelListFragment
 import kotlinx.android.synthetic.main.fragment_hotel_form.*
 
 class HotelFormFragment : DialogFragment(), HotelFormView {
-    private val presenter = HotelFormPresenter(this, MemoryRepository)
+    private val presenter =
+        HotelFormPresenter(this,
+            MemoryRepository
+        )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -93,7 +95,9 @@ class HotelFormFragment : DialogFragment(), HotelFormView {
 
      fun open(fm: FragmentManager) {
         if (fm.findFragmentByTag(DIALOG_TAG) == null) {
-            show(fm, DIALOG_TAG)
+            show(fm,
+                DIALOG_TAG
+            )
         }
     }
 
