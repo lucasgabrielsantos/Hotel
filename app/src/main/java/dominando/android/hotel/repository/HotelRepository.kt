@@ -10,7 +10,6 @@ interface HotelRepository{
 
     fun hotelById(id: Long, callback: (Hotel?) -> Unit)
 
-
     fun search(term: String, callback: (List<Hotel>?) -> Unit)
 
 
