@@ -10,16 +10,14 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import dominando.android.hotel.R
-import dominando.android.hotel.model.Hotel
-import dominando.android.hotel.repository.memory.MemoryRepository
 import dominando.android.hotel.list.HotelListFragment
+import dominando.android.hotel.model.Hotel
 import kotlinx.android.synthetic.main.fragment_hotel_form.*
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
 class HotelFormFragment : DialogFragment(), HotelFormView {
-    private val presenter =
-        HotelFormPresenter(this,
-            MemoryRepository
-        )
+    private val presenter: HotelFormPresenter by inject { parametersOf(this) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -93,9 +91,10 @@ class HotelFormFragment : DialogFragment(), HotelFormView {
         }
     }
 
-     fun open(fm: FragmentManager) {
+    fun open(fm: FragmentManager) {
         if (fm.findFragmentByTag(DIALOG_TAG) == null) {
-            show(fm,
+            show(
+                fm,
                 DIALOG_TAG
             )
         }
@@ -110,7 +109,7 @@ class HotelFormFragment : DialogFragment(), HotelFormView {
         const val EXTRA_HOTEL_ID = "hotel_id"
     }
 
-     fun newInstance(hotelId: Long = 0) = HotelFormFragment().apply {
+    fun newInstance(hotelId: Long = 0) = HotelFormFragment().apply {
         arguments = Bundle().apply {
             putLong(EXTRA_HOTEL_ID, hotelId)
         }
