@@ -107,11 +107,11 @@ class HotelFormFragment : DialogFragment(), HotelFormView {
     companion object {
         const val DIALOG_TAG = "editDialog"
         const val EXTRA_HOTEL_ID = "hotel_id"
-    }
 
-    fun newInstance(hotelId: Long = 0) = HotelFormFragment().apply {
-        arguments = Bundle().apply {
-            putLong(EXTRA_HOTEL_ID, hotelId)
+        fun newInstance(hotelId: Long = 0) = HotelFormFragment().apply {
+            arguments = Bundle().apply {
+                putLong(EXTRA_HOTEL_ID, hotelId)
+            }
         }
     }
 }

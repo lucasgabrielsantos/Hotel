@@ -17,6 +17,7 @@
     <string name="undo">Desfazer</string>
     <string name="action_share">Compartilhar</string>
     <string name="share_text">Me hospedei no %1$s e o classifiquei em %2$.1f estrelas</string>
+    <string name="action_edit">Editar</string>
 
 
     <plurals name="list_hotel_selected">
