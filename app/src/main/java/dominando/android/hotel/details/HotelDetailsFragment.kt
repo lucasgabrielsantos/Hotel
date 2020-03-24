@@ -13,9 +13,8 @@ import kotlinx.android.synthetic.main.fragment_hotel_details.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
-class HotelDetailsFragment : Fragment(),
-    HotelDetailsView {
-    private val presenter: HotelDetailsPresenter by inject { parametersOf(this) }
+class HotelDetailsFragment : Fragment(){
+    private val viewModel : HotelDetailsViewModel by viewModel()
     private var hotel: Hotel? = null
     private var shareActionProvider: ShareActionProvider? = null
 
@@ -29,7 +28,8 @@ class HotelDetailsFragment : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.loadHotelDetails(arguments?.getLong(EXTRA_HOTEL_ID, -1) ?: -1)
+        val id = arguments?.getLong(EXTRA_HOTEL_ID, -1) ?: -1
+        viewModel.loadHotelDetails(id).observe
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
