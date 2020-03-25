@@ -1,7 +1,7 @@
 package dominando.android
 
 import android.app.Application
-import dominando.android.di.androidModule
+import dominando.android.hotel.di.androidModule
 import org.koin.android.ext.android.startKoin
 import org.koin.standalone.StandAloneContext.stopKoin
 

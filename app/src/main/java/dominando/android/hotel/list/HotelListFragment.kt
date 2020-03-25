@@ -9,33 +9,61 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.fragment.app.ListFragment
+import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import dominando.android.hotel.R
 import dominando.android.hotel.model.Hotel
-import org.koin.android.ext.android.inject
-import org.koin.core.parameter.parametersOf
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class HotelListFragment : ListFragment(),
-    HotelListView, AdapterView.OnItemLongClickListener, ActionMode.Callback {
+class HotelListFragment : ListFragment(), AdapterView.OnItemLongClickListener, ActionMode.Callback {
 
-    private val presenter: HotelListPresenter by inject { parametersOf(this) }
+    private val viewModel: HotelListViewModel by sharedViewModel()
 
     private var actionMode: ActionMode? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        presenter.init()
         listView.onItemLongClickListener = this
+        viewModel.showDetailsCommand().observe(viewLifecycleOwner, Observer { hotel ->
+            if (hotel != null) {
+                showHotelsDetails(hotel)
+            }
+        })
+        viewModel.isInDeteleMode().observe(viewLifecycleOwner, Observer { deletedMode ->
+            if (deletedMode == true) {
+                showDeleteMode()
+            } else {
+                hideDeleteMode()
+            }
+        })
+        viewModel.selectedHotels().observe(viewLifecycleOwner, Observer { hotels ->
+            if (hotels != null) {
+                showSelectedHotels(hotels)
+            }
+        })
+        viewModel.selectionCount().observe(viewLifecycleOwner, Observer { count ->
+            if (count != null) {
+                updateSelectionCountText(count)
+            }
+        })
+        viewModel.getHotels()?.observe(viewLifecycleOwner, Observer { hotels ->
+            if (hotels != null) {
+                showHotels(hotels)
+            }
+        })
+        if (viewModel.getHotels()?.value == null) {
+            search()
+        }
     }
 
-    override fun showHotels(hotels: List<Hotel>) {
+    private fun showHotels(hotels: List<Hotel>) {
         val adapter = HotelAdapter(
             requireContext(), hotels
         )
         listAdapter = adapter
     }
 
-    override fun showHotelsDetails(hotel: Hotel) {
+    private fun showHotelsDetails(hotel: Hotel) {
 
         if (activity is OnHotelClickListener) {
             val listener = activity as OnHotelClickListener
@@ -44,14 +72,14 @@ class HotelListFragment : ListFragment(),
     }
 
 
-    override fun showDeleteMode() {
+    private fun showDeleteMode() {
         val appCompatActivity = (activity as AppCompatActivity)
         actionMode = appCompatActivity.startSupportActionMode(this)
         listView.onItemLongClickListener = null
         listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE
     }
 
-    override fun hideDeleteMode() {
+    fun hideDeleteMode() {
         listView.onItemLongClickListener = this
         for (i in 0 until listView.count) {
             listView.setItemChecked(i, false)
@@ -62,7 +90,7 @@ class HotelListFragment : ListFragment(),
         }
     }
 
-    override fun showSelectedHotels(hotels: List<Hotel>) {
+    private fun showSelectedHotels(hotels: List<Hotel>) {
         listView.post {
             for (i in 0 until listView.count) {
                 val hotel = listView.getItemAtPosition(i) as Hotel
@@ -73,7 +101,7 @@ class HotelListFragment : ListFragment(),
         }
     }
 
-    override fun updateSelectionCountText(count: Int) {
+    private fun updateSelectionCountText(count: Int) {
         view?.post {
             actionMode?.title =
                 resources.getQuantityString(R.plurals.list_hotel_selected, count, count)
@@ -83,7 +111,7 @@ class HotelListFragment : ListFragment(),
     override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
         super.onListItemClick(l, v, position, id)
         val hotel = l.getItemAtPosition(position) as Hotel
-        presenter.selectedHotel(hotel)
+        viewModel.selectHotel(hotel)
 
     }
 
@@ -91,12 +119,8 @@ class HotelListFragment : ListFragment(),
         fun onHotelClick(hotel: Hotel)
     }
 
-    fun search(text: String) {
-        presenter.searchHotels(text)
-    }
-
-    fun clearSearch() {
-        presenter.searchHotels("")
+    fun search(text: String = "") {
+        viewModel.search(text)
     }
 
     override fun onItemLongClick(
@@ -106,19 +130,15 @@ class HotelListFragment : ListFragment(),
         val consumed = (actionMode == null)
         if (consumed) {
             val hotel = parent?.getItemAtPosition(position) as Hotel
-            presenter.showDeleteMode()
-            presenter.selectedHotel(hotel)
+            viewModel.setInDeleteMode(true)
+            viewModel.selectHotel(hotel)
         }
         return consumed
     }
 
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
         if (item?.itemId == R.id.action_delete) {
-            presenter.deleteSelected { hotels ->
-                if (activity is OnHotelDeletedListener) {
-                    (activity as OnHotelDeletedListener).onHotelsDeleted(hotels)
-                }
-            }
+            viewModel.deleteSelected()
             return true
         }
         return false
@@ -133,21 +153,17 @@ class HotelListFragment : ListFragment(),
 
     override fun onDestroyActionMode(mode: ActionMode?) {
         actionMode = null
-        presenter.hideDeleteMode()
+        viewModel.setInDeleteMode(false)
     }
 
-    interface OnHotelDeletedListener {
-        fun onHotelsDeleted(hotels: List<Hotel>)
-    }
-
-    override fun showMessageHotelsDeleted(count: Int) {
+    private fun showMessageHotelsDeleted(count: Int) {
         Snackbar.make(
             listView,
             getString(R.string.message_hotels_deleted, count),
             Snackbar.LENGTH_LONG
         )
             .setAction(R.string.undo) {
-                presenter.undoDelete()
+                viewModel.undoDelete()
             }.show()
     }
 }
