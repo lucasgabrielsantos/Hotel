@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import dominando.android.hotel.model.Hotel
 import dominando.android.hotel.repository.HotelRepository
 
-class RoomRepository(database: HotelDatabase) : HotelRepository {
-
+class RoomRepository(
+    database: HotelDatabase
+) : HotelRepository {
     private val hotelDao = database.hotelDao()
-
 
     override fun save(hotel: Hotel) {
         if (hotel.id == 0L) {
@@ -16,7 +16,6 @@ class RoomRepository(database: HotelDatabase) : HotelRepository {
         } else {
             hotelDao.update(hotel)
         }
-
     }
 
     override fun remove(vararg hotels: Hotel) {

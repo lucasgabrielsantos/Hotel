@@ -15,7 +15,6 @@ abstract class HotelDatabase : RoomDatabase() {
     abstract fun hotelDao(): HotelDao
 
     companion object {
-
         private var instance: HotelDatabase? = null
 
         fun getDatabase(context: Context): HotelDatabase {
@@ -25,7 +24,6 @@ abstract class HotelDatabase : RoomDatabase() {
                     HotelDatabase::class.java,
                     DATABASE_NAME
                 )
-                    .fallbackToDestructiveMigration()
                     .allowMainThreadQueries()
                     .build()
             }

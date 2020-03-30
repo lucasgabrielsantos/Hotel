@@ -5,8 +5,9 @@ import androidx.lifecycle.ViewModel
 import dominando.android.hotel.model.Hotel
 import dominando.android.hotel.repository.HotelRepository
 
-class HotelFormViewModel(private val repository: HotelRepository) : ViewModel() {
-
+class HotelFormViewModel(
+    private val repository: HotelRepository
+) : ViewModel() {
     private val validator by lazy { HotelValidator() }
 
     fun loadHotel(id: Long): LiveData<Hotel> {

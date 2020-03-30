@@ -22,7 +22,8 @@ interface HotelDao {
     fun hotelById(id: Long): LiveData<Hotel>
 
     @Query(
-        """SELECT * FROM $TABLE_HOTEL 
-        WHERE $COLUMN_NAME LIKE :query ORDER BY $COLUMN_NAME""")
+        """SELECT * FROM $TABLE_HOTEL
+            WHERE $COLUMN_NAME LIKE :query ORDER BY $COLUMN_NAME"""
+    )
     fun search(query: String): LiveData<List<Hotel>>
 }

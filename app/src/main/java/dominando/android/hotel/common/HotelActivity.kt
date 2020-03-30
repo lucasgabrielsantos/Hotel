@@ -1,5 +1,6 @@
 package dominando.android.hotel.common
 
+
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
@@ -17,30 +18,26 @@ import kotlinx.android.synthetic.main.activity_hotel.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HotelActivity : AppCompatActivity(),
-    HotelListFragment.OnHotelClickListener, SearchView.OnQueryTextListener,
+    HotelListFragment.OnHotelClickListener,
+    SearchView.OnQueryTextListener,
     MenuItem.OnActionExpandListener {
 
+    private val viewModel: HotelListViewModel by viewModel()
     private var searchView: SearchView? = null
     private val listFragment: HotelListFragment by lazy {
         supportFragmentManager.findFragmentById(R.id.fragmentList) as HotelListFragment
     }
-    private val viewModel: HotelListViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hotel)
-
         fabAdd.setOnClickListener {
             listFragment.hideDeleteMode()
             HotelFormFragment.newInstance().open(supportFragmentManager)
         }
     }
 
-    private fun isTablet() = resources.getBoolean(R.bool.tablet)
-    private fun isSmartphone() = resources.getBoolean(R.bool.smartphone)
-
     override fun onHotelClick(hotel: Hotel) {
-
         if (isTablet()) {
             viewModel.hotelIdSelected = hotel.id
             showDetailsFragment(hotel.id)
@@ -49,34 +46,16 @@ class HotelActivity : AppCompatActivity(),
         }
     }
 
-    private fun showDetailsActivity(hotelId: Long) {
-        HotelDetailsActivity.open(
-            this,
-            hotelId
-        )
-    }
-
-    private fun showDetailsFragment(hotelId: Long) {
-        searchView?.setOnQueryTextListener(null)
-        val fragment = HotelDetailsFragment.newInstance(hotelId)
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.details, fragment, HotelDetailsFragment.TAG_DETAILS)
-            .commit()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.hotel, menu)
-        val searchItem = menu?.findItem(R.id.action_info)
+        val searchItem = menu?.findItem(R.id.action_search)
         searchItem?.setOnActionExpandListener(this)
         searchView = searchItem?.actionView as SearchView
         searchView?.queryHint = getString(R.string.hint_search)
         searchView?.setOnQueryTextListener(this)
-
         if (viewModel.getSearchTerm()?.value?.isNotEmpty() == true) {
             Handler().post {
                 val query = viewModel.getSearchTerm()?.value
-
                 searchItem.expandActionView()
                 searchView?.setQuery(query, true)
                 searchView?.clearFocus()
@@ -85,9 +64,8 @@ class HotelActivity : AppCompatActivity(),
         return true
     }
 
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
             R.id.action_info ->
                 AboutDialogFragment().show(supportFragmentManager, "sobre")
         }
@@ -101,10 +79,30 @@ class HotelActivity : AppCompatActivity(),
         return true
     }
 
-    override fun onMenuItemActionExpand(item: MenuItem?) = true
+    override fun onMenuItemActionExpand(item: MenuItem?) = true // para expandir a view
 
     override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
         listFragment.search()
         return true
+    }
+
+    private fun isTablet() = resources.getBoolean(R.bool.tablet)
+
+    private fun isSmartphone() = resources.getBoolean(R.bool.smartphone)
+
+    private fun showDetailsFragment(hotelId: Long) {
+        searchView?.setOnQueryTextListener(null)
+        val fragment = HotelDetailsFragment.newInstance(hotelId)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(
+                R.id.details, fragment,
+                HotelDetailsFragment.TAG_DETAILS
+            )
+            .commit()
+    }
+
+    private fun showDetailsActivity(hotelId: Long) {
+        HotelDetailsActivity.open(this, hotelId)
     }
 }

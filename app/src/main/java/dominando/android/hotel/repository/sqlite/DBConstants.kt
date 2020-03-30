@@ -1,5 +1,6 @@
 package dominando.android.hotel.repository.sqlite
 
+
 const val DATABASE_NAME = "dbHotel"
 const val DATABASE_VERSION = 2
 const val TABLE_HOTEL = "hotel"

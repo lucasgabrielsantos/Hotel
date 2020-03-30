@@ -1,6 +1,5 @@
 package dominando.android.hotel.common
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
@@ -10,7 +9,6 @@ import androidx.fragment.app.DialogFragment
 import dominando.android.hotel.R
 
 class AboutDialogFragment : DialogFragment() {
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val listener = DialogInterface.OnClickListener { _, i ->
             if (i == DialogInterface.BUTTON_NEGATIVE) {
@@ -21,8 +19,7 @@ class AboutDialogFragment : DialogFragment() {
                 startActivity(intent)
             }
         }
-
-        return AlertDialog.Builder(requireContext())
+        return androidx.appcompat.app.AlertDialog.Builder(requireContext())
             .setTitle(R.string.about_title)
             .setMessage(R.string.about_message)
             .setPositiveButton(android.R.string.ok, null)

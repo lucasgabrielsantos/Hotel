@@ -15,10 +15,11 @@ import dominando.android.hotel.R
 import dominando.android.hotel.model.Hotel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class HotelListFragment : ListFragment(), AdapterView.OnItemLongClickListener, ActionMode.Callback {
+class HotelListFragment : ListFragment(),
+    AdapterView.OnItemLongClickListener,
+    ActionMode.Callback {
 
     private val viewModel: HotelListViewModel by sharedViewModel()
-
     private var actionMode: ActionMode? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -26,11 +27,11 @@ class HotelListFragment : ListFragment(), AdapterView.OnItemLongClickListener, A
         listView.onItemLongClickListener = this
         viewModel.showDetailsCommand().observe(viewLifecycleOwner, Observer { hotel ->
             if (hotel != null) {
-                showHotelsDetails(hotel)
+                showHotelDetails(hotel)
             }
         })
-        viewModel.isInDeteleMode().observe(viewLifecycleOwner, Observer { deletedMode ->
-            if (deletedMode == true) {
+        viewModel.isInDeleteMode().observe(viewLifecycleOwner, Observer { deleteMode ->
+            if (deleteMode == true) {
                 showDeleteMode()
             } else {
                 hideDeleteMode()
@@ -46,6 +47,11 @@ class HotelListFragment : ListFragment(), AdapterView.OnItemLongClickListener, A
                 updateSelectionCountText(count)
             }
         })
+        viewModel.showDeletedMessage().observe(viewLifecycleOwner, Observer { count ->
+            if (count != null && count > 0) {
+                showMessageHotelsDeleted(count)
+            }
+        })
         viewModel.getHotels()?.observe(viewLifecycleOwner, Observer { hotels ->
             if (hotels != null) {
                 showHotels(hotels)
@@ -57,20 +63,39 @@ class HotelListFragment : ListFragment(), AdapterView.OnItemLongClickListener, A
     }
 
     private fun showHotels(hotels: List<Hotel>) {
-        val adapter = HotelAdapter(
-            requireContext(), hotels
-        )
+        val adapter = HotelAdapter(requireContext(), hotels)
         listAdapter = adapter
     }
 
-    private fun showHotelsDetails(hotel: Hotel) {
-
+    private fun showHotelDetails(hotel: Hotel) {
         if (activity is OnHotelClickListener) {
             val listener = activity as OnHotelClickListener
             listener.onHotelClick(hotel)
         }
     }
 
+    override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
+        super.onListItemClick(l, v, position, id)
+        val hotel = l?.getItemAtPosition(position) as Hotel
+        viewModel.selectHotel(hotel)
+    }
+
+    fun search(text: String = "") {
+        viewModel.search(text)
+    }
+
+    override fun onItemLongClick(
+        parent: AdapterView<*>?, view: View?,
+        position: Int, id: Long
+    ): Boolean {
+        val consumed = (actionMode == null)
+        if (consumed) {
+            val hotel = parent?.getItemAtPosition(position) as Hotel
+            viewModel.setInDeleteMode(true)
+            viewModel.selectHotel(hotel)
+        }
+        return consumed
+    }
 
     private fun showDeleteMode() {
         val appCompatActivity = (activity as AppCompatActivity)
@@ -90,6 +115,13 @@ class HotelListFragment : ListFragment(), AdapterView.OnItemLongClickListener, A
         }
     }
 
+    private fun updateSelectionCountText(count: Int) {
+        view?.post {
+            actionMode?.title =
+                resources.getQuantityString(R.plurals.list_hotel_selected, count, count)
+        }
+    }
+
     private fun showSelectedHotels(hotels: List<Hotel>) {
         listView.post {
             for (i in 0 until listView.count) {
@@ -101,39 +133,16 @@ class HotelListFragment : ListFragment(), AdapterView.OnItemLongClickListener, A
         }
     }
 
-    private fun updateSelectionCountText(count: Int) {
-        view?.post {
-            actionMode?.title =
-                resources.getQuantityString(R.plurals.list_hotel_selected, count, count)
-        }
-    }
-
-    override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
-        super.onListItemClick(l, v, position, id)
-        val hotel = l.getItemAtPosition(position) as Hotel
-        viewModel.selectHotel(hotel)
-
-    }
-
-    interface OnHotelClickListener {
-        fun onHotelClick(hotel: Hotel)
-    }
-
-    fun search(text: String = "") {
-        viewModel.search(text)
-    }
-
-    override fun onItemLongClick(
-        parent: AdapterView<*>?, view: View?,
-        position: Int, id: Long
-    ): Boolean {
-        val consumed = (actionMode == null)
-        if (consumed) {
-            val hotel = parent?.getItemAtPosition(position) as Hotel
-            viewModel.setInDeleteMode(true)
-            viewModel.selectHotel(hotel)
-        }
-        return consumed
+    private fun showMessageHotelsDeleted(count: Int) {
+        Snackbar.make(
+            listView,
+            getString(R.string.message_hotels_deleted, count),
+            Snackbar.LENGTH_LONG
+        )
+            .setAction(R.string.undo) {
+                viewModel.undoDelete()
+            }
+            .show()
     }
 
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
@@ -156,14 +165,7 @@ class HotelListFragment : ListFragment(), AdapterView.OnItemLongClickListener, A
         viewModel.setInDeleteMode(false)
     }
 
-    private fun showMessageHotelsDeleted(count: Int) {
-        Snackbar.make(
-            listView,
-            getString(R.string.message_hotels_deleted, count),
-            Snackbar.LENGTH_LONG
-        )
-            .setAction(R.string.undo) {
-                viewModel.undoDelete()
-            }.show()
+    interface OnHotelClickListener {
+        fun onHotelClick(hotel: Hotel)
     }
 }

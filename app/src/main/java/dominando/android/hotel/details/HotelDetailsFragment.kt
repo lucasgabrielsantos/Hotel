@@ -18,6 +18,10 @@ class HotelDetailsFragment : Fragment() {
     private var hotel: Hotel? = null
     private var shareActionProvider: ShareActionProvider? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,17 +46,21 @@ class HotelDetailsFragment : Fragment() {
         })
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.hotel_details, menu)
-        val shareItem = menu.findItem(R.id.action_share)
+        inflater?.inflate(R.menu.hotel_details, menu)
+        val shareItem = menu?.findItem(R.id.action_share)
         shareActionProvider = MenuItemCompat.getActionProvider(shareItem) as? ShareActionProvider
         setShareIntent()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.action_edit) {
+            HotelFormFragment
+                .newInstance(hotel?.id ?: 0)
+                .open(requireFragmentManager())
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setShareIntent() {
@@ -62,7 +70,6 @@ class HotelDetailsFragment : Fragment() {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, text)
         })
-
     }
 
     private fun showHotelDetails(hotel: Hotel) {
@@ -70,27 +77,17 @@ class HotelDetailsFragment : Fragment() {
         txtName.text = hotel.name
         txtAddress.text = hotel.address
         rtbRating.rating = hotel.rating
-
     }
 
     private fun errorHotelNotFound() {
         txtName.text = getString(R.string.error_hotel_not_found)
         txtAddress.visibility = View.GONE
         rtbRating.visibility = View.GONE
-
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_edit) {
-            HotelFormFragment.newInstance(hotel?.id ?: 0)
-                .open(requireFragmentManager())
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     companion object {
         const val TAG_DETAILS = "tagDetalhe"
-        const val EXTRA_HOTEL_ID = "hotelId"
+        private const val EXTRA_HOTEL_ID = "hotelId"
 
         fun newInstance(id: Long) = HotelDetailsFragment().apply {
             arguments = Bundle().apply {

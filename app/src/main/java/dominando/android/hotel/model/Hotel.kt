@@ -11,10 +11,7 @@ data class Hotel(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = COLUMN_ID)
     var id: Long = 0,
-
     var name: String = "",
     var address: String = "",
     var rating: Float = 0.0F
-) {
-    override fun toString(): String = name
-}
+)

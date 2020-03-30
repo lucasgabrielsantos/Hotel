@@ -8,18 +8,17 @@ import dominando.android.hotel.common.SingleLiveEvent
 import dominando.android.hotel.model.Hotel
 import dominando.android.hotel.repository.HotelRepository
 
-class HotelListViewModel(private val repository: HotelRepository) : ViewModel() {
+class HotelListViewModel(
+    private val repository: HotelRepository
+) : ViewModel() {
     var hotelIdSelected: Long = -1
-
     private val searchTerm = MutableLiveData<String>()
     private val hotels = Transformations.switchMap(searchTerm) { term ->
-        repository.search("%$term")
+        repository.search("%$term%")
     }
-
     private val inDeleteMode = MutableLiveData<Boolean>().apply {
         value = false
     }
-
     private val selectedItems = mutableListOf<Hotel>()
     private val selectionCount = MutableLiveData<Int>()
     private val selectedHotels = MutableLiveData<List<Hotel>>().apply {
@@ -28,8 +27,7 @@ class HotelListViewModel(private val repository: HotelRepository) : ViewModel() 
     private val deletedItems = mutableListOf<Hotel>()
     private val showDeletedMessage = SingleLiveEvent<Int>()
     private val showDetailsCommand = SingleLiveEvent<Hotel>()
-
-    fun isInDeteleMode(): LiveData<Boolean> = inDeleteMode
+    fun isInDeleteMode(): LiveData<Boolean> = inDeleteMode
 
     fun getSearchTerm(): LiveData<String>? = searchTerm
 
@@ -57,7 +55,7 @@ class HotelListViewModel(private val repository: HotelRepository) : ViewModel() 
         }
     }
 
-    fun toggleHotelSelected(hotel: Hotel) {
+    private fun toggleHotelSelected(hotel: Hotel) {
         val existing = selectedItems.find { it.id == hotel.id }
         if (existing == null) {
             selectedItems.add(hotel)
@@ -70,8 +68,8 @@ class HotelListViewModel(private val repository: HotelRepository) : ViewModel() 
         searchTerm.value = term
     }
 
-    fun setInDeleteMode(deleteMode: Boolean){
-        if(!deleteMode){
+    fun setInDeleteMode(deleteMode: Boolean) {
+        if (!deleteMode) {
             selectionCount.value = 0
             selectedItems.clear()
             selectedHotels.value = selectedItems
@@ -80,7 +78,7 @@ class HotelListViewModel(private val repository: HotelRepository) : ViewModel() 
         inDeleteMode.value = deleteMode
     }
 
-    fun deleteSelected(){
+    fun deleteSelected() {
         repository.remove(*selectedItems.toTypedArray())
         deletedItems.clear()
         deletedItems.addAll(selectedItems)
@@ -88,11 +86,12 @@ class HotelListViewModel(private val repository: HotelRepository) : ViewModel() 
         showDeletedMessage.value = deletedItems.size
     }
 
-    fun undoDelete(){
-        if(deletedItems.isNotEmpty()){
-            for (hotel in deletedItems)
+    fun undoDelete() {
+        if (deletedItems.isNotEmpty()) {
+            for (hotel in deletedItems) {
                 hotel.id = 0L
-            repository.save(hotel = Hotel())
+                repository.save(hotel)
+            }
         }
     }
 }
