@@ -9,8 +9,18 @@ class HotelListPresenter(
 ) {
     private var lastTerm = ""
     private var inDeleteMode = false
-    private var selectedItems = mutableListOf<Hotel>()
+    private val selectedItems = mutableListOf<Hotel>()
     private val deletedItems = mutableListOf<Hotel>()
+
+    fun init() {
+        if (inDeleteMode) {
+            showDeleteMode()
+            view.updateSelectionCountText(selectedItems.size)
+            view.showSelectedHotels(selectedItems)
+        } else {
+            refresh()
+        }
+    }
 
     fun searchHotels(term: String) {
         lastTerm = term
@@ -19,7 +29,7 @@ class HotelListPresenter(
         }
     }
 
-    fun selectedHotel(hotel: Hotel) {
+    fun selectHotel(hotel: Hotel) {
         if (inDeleteMode) {
             toggleHotelSelected(hotel)
             if (selectedItems.size == 0) {
@@ -29,7 +39,7 @@ class HotelListPresenter(
                 view.showSelectedHotels(selectedItems)
             }
         } else {
-            view.showHotelsDetails(hotel)
+            view.showHotelDetails(hotel)
         }
     }
 
@@ -65,16 +75,6 @@ class HotelListPresenter(
         callback(selectedItems)
         hideDeleteMode()
         view.showMessageHotelsDeleted(deletedItems.size)
-    }
-
-    fun init() {
-        if (inDeleteMode) {
-            showDeleteMode()
-            view.updateSelectionCountText(selectedItems.size)
-            view.showSelectedHotels(selectedItems)
-        } else {
-            refresh()
-        }
     }
 
     fun undoDelete() {

@@ -1,4 +1,4 @@
-package dominando.android.di
+package dominando.android.hotel.di
 
 import dominando.android.hotel.details.HotelDetailsPresenter
 import dominando.android.hotel.details.HotelDetailsView
@@ -12,25 +12,21 @@ import org.koin.dsl.module.module
 
 val androidModule = module {
     single { this }
-
     single {
-        SQLiteRepository(context = get()) as HotelRepository
+        SQLiteRepository(ctx = get()) as HotelRepository
     }
-
     factory { (view: HotelListView) ->
         HotelListPresenter(
             view,
             repository = get()
         )
     }
-
     factory { (view: HotelDetailsView) ->
         HotelDetailsPresenter(
             view,
             repository = get()
         )
     }
-
     factory { (view: HotelFormView) ->
         HotelFormPresenter(
             view,

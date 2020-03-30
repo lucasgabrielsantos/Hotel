@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import dominando.android.hotel.R
-import dominando.android.hotel.list.HotelListFragment
 import dominando.android.hotel.model.Hotel
 import kotlinx.android.synthetic.main.fragment_hotel_form.*
 import org.koin.android.ext.android.inject
@@ -20,24 +19,25 @@ class HotelFormFragment : DialogFragment(), HotelFormView {
     private val presenter: HotelFormPresenter by inject { parametersOf(this) }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_hotel_form, container, false)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val hotelId = arguments?.getLong(EXTRA_HOTEL_ID, 0) ?: 0
         presenter.loadHotel(hotelId)
         edtAddress.setOnEditorActionListener { _, i, _ ->
-            handleKeyBoardEvent(i)
+            handleKeyboardEvent(i)
         }
+        dialog?.setTitle(R.string.action_new_hotel)
+        // Abre o teclado virtual ao exibir o Dialog
         dialog?.window?.setSoftInputMode(
             WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
         )
     }
-
 
     override fun showHotel(hotel: Hotel) {
         edtName.setText(hotel.name)
@@ -46,28 +46,22 @@ class HotelFormFragment : DialogFragment(), HotelFormView {
     }
 
     override fun errorSaveHotel() {
-        Toast.makeText(
-            requireContext(), R.string.error_hotel_not_found,
-            Toast.LENGTH_LONG
-        ).show()
+        Toast.makeText(requireContext(), R.string.error_hotel_not_found, Toast.LENGTH_SHORT).show()
     }
 
     override fun errorInvalidHotel() {
-        Toast.makeText(
-            requireContext(), R.string.error_invalid_hotel,
-            Toast.LENGTH_LONG
-        ).show()
+        Toast.makeText(requireContext(), R.string.error_invalid_hotel, Toast.LENGTH_SHORT).show()
     }
 
-    private fun handleKeyBoardEvent(actionId: Int): Boolean {
+    private fun handleKeyboardEvent(actionId: Int): Boolean {
         if (EditorInfo.IME_ACTION_DONE == actionId) {
             val hotel = saveHotel()
             if (hotel != null) {
-                if (activity is HotelListFragment.OnHotelClickListener) {
+                if (activity is OnHotelSavedListener) {
                     val listener = activity as OnHotelSavedListener
                     listener.onHotelSaved(hotel)
                 }
-                //Feche Dialog
+                // Feche o dialog
                 dialog?.dismiss()
                 return true
             }
@@ -79,11 +73,9 @@ class HotelFormFragment : DialogFragment(), HotelFormView {
         val hotel = Hotel()
         val hotelId = arguments?.getLong(EXTRA_HOTEL_ID, 0) ?: 0
         hotel.id = hotelId
-        hotel.apply {
-            name = edtName.text.toString()
-            address = edtAddress.text.toString()
-            rating = rtbRating.rating
-        }
+        hotel.name = edtName.text.toString()
+        hotel.address = edtAddress.text.toString()
+        hotel.rating = rtbRating.rating
         if (presenter.saveHotel(hotel)) {
             return hotel
         } else {
@@ -93,10 +85,7 @@ class HotelFormFragment : DialogFragment(), HotelFormView {
 
     fun open(fm: FragmentManager) {
         if (fm.findFragmentByTag(DIALOG_TAG) == null) {
-            show(
-                fm,
-                DIALOG_TAG
-            )
+            show(fm, DIALOG_TAG)
         }
     }
 
@@ -105,8 +94,8 @@ class HotelFormFragment : DialogFragment(), HotelFormView {
     }
 
     companion object {
-        const val DIALOG_TAG = "editDialog"
-        const val EXTRA_HOTEL_ID = "hotel_id"
+        private const val DIALOG_TAG = "editDialog"
+        private const val EXTRA_HOTEL_ID = "hotel_id"
 
         fun newInstance(hotelId: Long = 0) = HotelFormFragment().apply {
             arguments = Bundle().apply {

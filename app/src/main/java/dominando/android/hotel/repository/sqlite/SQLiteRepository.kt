@@ -6,10 +6,10 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import dominando.android.hotel.model.Hotel
 import dominando.android.hotel.repository.HotelRepository
+import java.util.*
 
-class SQLiteRepository(context: Context) : HotelRepository {
-
-    private val helper: HotelSqlHelper = HotelSqlHelper(context)
+class SQLiteRepository(ctx: Context) : HotelRepository {
+    private val helper: HotelSqlHelper = HotelSqlHelper(ctx)
 
     private fun insert(hotel: Hotel) {
         val db = helper.writableDatabase
@@ -28,6 +28,7 @@ class SQLiteRepository(context: Context) : HotelRepository {
     private fun update(hotel: Hotel) {
         val db = helper.writableDatabase
         val cv = ContentValues().apply {
+            put(COLUMN_ID, hotel.id)
             put(COLUMN_NAME, hotel.name)
             put(COLUMN_ADDRESS, hotel.address)
             put(COLUMN_RATING, hotel.rating)
@@ -70,7 +71,7 @@ class SQLiteRepository(context: Context) : HotelRepository {
     }
 
     override fun search(term: String, callback: (List<Hotel>?) -> Unit) {
-        var sql = "SELECT *FROM $TABLE_HOTEL"
+        var sql = "SELECT * FROM $TABLE_HOTEL"
         var args: Array<String>? = null
         if (term.isNotEmpty()) {
             sql += " WHERE $COLUMN_NAME LIKE ?"
@@ -91,18 +92,17 @@ class SQLiteRepository(context: Context) : HotelRepository {
 
     private fun hotelFromCursor(cursor: Cursor): Hotel {
         val id = cursor.getLong(
-            cursor.getColumnIndex((COLUMN_ID))
+            cursor.getColumnIndex(COLUMN_ID)
         )
         val name = cursor.getString(
-            cursor.getColumnIndex((COLUMN_NAME))
+            cursor.getColumnIndex(COLUMN_NAME)
         )
         val address = cursor.getString(
-            cursor.getColumnIndex((COLUMN_ADDRESS))
+            cursor.getColumnIndex(COLUMN_ADDRESS)
         )
         val rating = cursor.getFloat(
-            cursor.getColumnIndex((COLUMN_RATING))
+            cursor.getColumnIndex(COLUMN_RATING)
         )
         return Hotel(id, name, address, rating)
     }
-
 }

@@ -16,33 +16,58 @@ import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
 class HotelListFragment : ListFragment(),
-    HotelListView, AdapterView.OnItemLongClickListener, ActionMode.Callback {
+    HotelListView,
+    AdapterView.OnItemLongClickListener,
+    ActionMode.Callback {
 
     private val presenter: HotelListPresenter by inject { parametersOf(this) }
-
     private var actionMode: ActionMode? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        retainInstance = true
         presenter.init()
         listView.onItemLongClickListener = this
     }
 
     override fun showHotels(hotels: List<Hotel>) {
-        val adapter = HotelAdapter(
-            requireContext(), hotels
-        )
+        val adapter = HotelAdapter(requireContext(), hotels)
         listAdapter = adapter
     }
 
-    override fun showHotelsDetails(hotel: Hotel) {
-
+    override fun showHotelDetails(hotel: Hotel) {
         if (activity is OnHotelClickListener) {
             val listener = activity as OnHotelClickListener
             listener.onHotelClick(hotel)
         }
     }
 
+    override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
+        super.onListItemClick(l, v, position, id)
+        val hotel = l.getItemAtPosition(position) as Hotel
+        presenter.selectHotel(hotel)
+    }
+
+    fun search(text: String) {
+        presenter.searchHotels(text)
+    }
+
+    fun clearSearch() {
+        presenter.searchHotels("")
+    }
+
+    override fun onItemLongClick(
+        parent: AdapterView<*>?, view: View?,
+        position: Int, id: Long
+    ): Boolean {
+        val consumed = (actionMode == null)
+        if (consumed) {
+            val hotel = parent?.getItemAtPosition(position) as Hotel
+            presenter.showDeleteMode()
+            presenter.selectHotel(hotel)
+        }
+        return consumed
+    }
 
     override fun showDeleteMode() {
         val appCompatActivity = (activity as AppCompatActivity)
@@ -62,6 +87,13 @@ class HotelListFragment : ListFragment(),
         }
     }
 
+    override fun updateSelectionCountText(count: Int) {
+        view?.post {
+            actionMode?.title =
+                resources.getQuantityString(R.plurals.list_hotel_selected, count, count)
+        }
+    }
+
     override fun showSelectedHotels(hotels: List<Hotel>) {
         listView.post {
             for (i in 0 until listView.count) {
@@ -73,43 +105,16 @@ class HotelListFragment : ListFragment(),
         }
     }
 
-    override fun updateSelectionCountText(count: Int) {
-        view?.post {
-            actionMode?.title =
-                resources.getQuantityString(R.plurals.list_hotel_selected, count, count)
-        }
-    }
-
-    override fun onListItemClick(l: ListView, v: View, position: Int, id: Long) {
-        super.onListItemClick(l, v, position, id)
-        val hotel = l.getItemAtPosition(position) as Hotel
-        presenter.selectedHotel(hotel)
-
-    }
-
-    interface OnHotelClickListener {
-        fun onHotelClick(hotel: Hotel)
-    }
-
-    fun search(text: String) {
-        presenter.searchHotels(text)
-    }
-
-    fun clearSearch() {
-        presenter.searchHotels("")
-    }
-
-    override fun onItemLongClick(
-        parent: AdapterView<*>?, view: View?,
-        position: Int, id: Long
-    ): Boolean {
-        val consumed = (actionMode == null)
-        if (consumed) {
-            val hotel = parent?.getItemAtPosition(position) as Hotel
-            presenter.showDeleteMode()
-            presenter.selectedHotel(hotel)
-        }
-        return consumed
+    override fun showMessageHotelsDeleted(count: Int) {
+        Snackbar.make(
+            listView,
+            getString(R.string.message_hotels_deleted, count),
+            Snackbar.LENGTH_LONG
+        )
+            .setAction(R.string.undo) {
+                presenter.undoDelete()
+            }
+            .show()
     }
 
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
@@ -140,14 +145,7 @@ class HotelListFragment : ListFragment(),
         fun onHotelsDeleted(hotels: List<Hotel>)
     }
 
-    override fun showMessageHotelsDeleted(count: Int) {
-        Snackbar.make(
-            listView,
-            getString(R.string.message_hotels_deleted, count),
-            Snackbar.LENGTH_LONG
-        )
-            .setAction(R.string.undo) {
-                presenter.undoDelete()
-            }.show()
+    interface OnHotelClickListener {
+        fun onHotelClick(hotel: Hotel)
     }
 }

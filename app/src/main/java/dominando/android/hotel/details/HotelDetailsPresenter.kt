@@ -8,7 +8,6 @@ class HotelDetailsPresenter(
 ) {
     fun loadHotelDetails(id: Long) {
         repository.hotelById(id) { hotel ->
-
             if (hotel != null) {
                 view.showHotelDetails(hotel)
             } else {

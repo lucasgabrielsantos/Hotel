@@ -13,12 +13,15 @@ import kotlinx.android.synthetic.main.fragment_hotel_details.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
-class HotelDetailsFragment : Fragment(),
-    HotelDetailsView {
+class HotelDetailsFragment : Fragment(), HotelDetailsView {
     private val presenter: HotelDetailsPresenter by inject { parametersOf(this) }
     private var hotel: Hotel? = null
     private var shareActionProvider: ShareActionProvider? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,17 +35,21 @@ class HotelDetailsFragment : Fragment(),
         presenter.loadHotelDetails(arguments?.getLong(EXTRA_HOTEL_ID, -1) ?: -1)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.hotel_details, menu)
         val shareItem = menu.findItem(R.id.action_share)
         shareActionProvider = MenuItemCompat.getActionProvider(shareItem) as? ShareActionProvider
         setShareIntent()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_edit) {
+            HotelFormFragment
+                .newInstance(hotel?.id ?: 0)
+                .open(requireFragmentManager())
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setShareIntent() {
@@ -52,7 +59,6 @@ class HotelDetailsFragment : Fragment(),
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, text)
         })
-
     }
 
     override fun showHotelDetails(hotel: Hotel) {
@@ -60,27 +66,17 @@ class HotelDetailsFragment : Fragment(),
         txtName.text = hotel.name
         txtAddress.text = hotel.address
         rtbRating.rating = hotel.rating
-
     }
 
     override fun errorHotelNotFound() {
         txtName.text = getString(R.string.error_hotel_not_found)
         txtAddress.visibility = View.GONE
         rtbRating.visibility = View.GONE
-
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.action_edit){
-            HotelFormFragment.newInstance(hotel?.id ?: 0)
-                .open(requireFragmentManager())
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     companion object {
         const val TAG_DETAILS = "tagDetalhe"
-        const val EXTRA_HOTEL_ID = "hotelId"
+        private const val EXTRA_HOTEL_ID = "hotelId"
 
         fun newInstance(id: Long) = HotelDetailsFragment().apply {
             arguments = Bundle().apply {

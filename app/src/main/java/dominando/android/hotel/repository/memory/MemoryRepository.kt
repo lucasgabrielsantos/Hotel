@@ -4,10 +4,8 @@ import dominando.android.hotel.model.Hotel
 import dominando.android.hotel.repository.HotelRepository
 
 object MemoryRepository : HotelRepository {
-
     private var nextId = 1L
-    private val hotelList = mutableListOf<Hotel>()
-
+    private val hotelsList = mutableListOf<Hotel>()
     init {
         save(
             Hotel(
@@ -37,14 +35,14 @@ object MemoryRepository : HotelRepository {
             Hotel(
                 0,
                 "Byanca Beach Hotel",
-                "Rua Reseda",
+                "Rua Mamanguape",
                 4.0f
             )
         )
         save(
             Hotel(
                 0,
-                "Grand Hotel",
+                "Grand Hotel Dor",
                 "Av. Bernardo",
                 3.5f
             )
@@ -53,56 +51,50 @@ object MemoryRepository : HotelRepository {
             Hotel(
                 0,
                 "Hotel Cool",
-                "Av. Lucas",
-                3.5f
+                "Av. Conselheiro Aguiar",
+                4.0f
             )
         )
         save(
             Hotel(
                 0,
-                "Hotel Infinity",
-                "Rua Gabriel Dos Santos",
-                2.5f
+                "Hotel Infinito",
+                "Rua Ribeiro de Brito",
+                5.0f
             )
         )
         save(
             Hotel(
                 0,
-                "Hotel Tulipy",
+                "Hotel Tulipa",
                 "Av. Boa Viagem",
                 5.0f
             )
         )
     }
-
     override fun save(hotel: Hotel) {
         if (hotel.id == 0L) {
             hotel.id = nextId++
-            hotelList.add(hotel)
+            hotelsList.add(hotel)
         } else {
-            val index = hotelList.indexOfFirst { it.id == hotel.id }
+            val index = hotelsList.indexOfFirst { it.id == hotel.id }
             if (index > -1) {
-                hotelList[index] = hotel
+                hotelsList[index] = hotel
             } else {
-                hotelList.add(hotel)
+                hotelsList.add(hotel)
             }
         }
     }
-
     override fun remove(vararg hotels: Hotel) {
-        hotelList.removeAll(hotels)
-
+        hotelsList.removeAll(hotels)
     }
-
     override fun hotelById(id: Long, callback: (Hotel?) -> Unit) {
-        callback(hotelList.find { it.id == id })
-
+        callback(hotelsList.find { it.id == id })
     }
-
     override fun search(term: String, callback: (List<Hotel>?) -> Unit) {
         val resultList =
-            if (term.isEmpty()) hotelList
-            else hotelList.filter {
+            if (term.isEmpty()) hotelsList
+            else hotelsList.filter {
                 it.name.toUpperCase().contains(term.toUpperCase())
             }
         callback(resultList.sortedBy { it.name })
