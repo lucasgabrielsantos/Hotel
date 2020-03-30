@@ -1,17 +1,15 @@
 package dominando.android.hotel.list
 
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.RatingBar
 import android.widget.TextView
-import dominando.android.hotel.R
 import dominando.android.hotel.model.Hotel
 import kotlinx.android.synthetic.main.item_hotel.view.*
 
-class HotelAdapter(context: Context, hotels: List<Hotel>):
+class HotelAdapter(context: Context, hotels: List<Hotel>) :
     ArrayAdapter<Hotel>(context, 0, hotels) {
 
     override fun getView(position: Int, convertView: View, parent: ViewGroup?): View {
