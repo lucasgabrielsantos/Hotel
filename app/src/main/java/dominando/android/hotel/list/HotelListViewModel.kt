@@ -4,13 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.work.WorkInfo
 import dominando.android.hotel.common.SingleLiveEvent
 import dominando.android.hotel.model.Hotel
 import dominando.android.hotel.repository.HotelRepository
+import dominando.android.hotel.repository.http.HotelSyncWorker
+import dominando.android.hotel.repository.http.Status
 
 class HotelListViewModel(
     private val repository: HotelRepository
 ) : ViewModel() {
+    var syncStatus: LiveData<WorkInfo>? = null
+
     var hotelIdSelected: Long = -1
     private val searchTerm = MutableLiveData<String>()
     private val hotels = Transformations.switchMap(searchTerm) { term ->
@@ -79,7 +84,10 @@ class HotelListViewModel(
     }
 
     fun deleteSelected() {
-        repository.remove(*selectedItems.toTypedArray())
+        selectedItems.forEach {
+            it.status = Status.DELETE
+            repository.update(it)
+        }
         deletedItems.clear()
         deletedItems.addAll(selectedItems)
         setInDeleteMode(false)
@@ -93,5 +101,10 @@ class HotelListViewModel(
                 repository.save(hotel)
             }
         }
+    }
+
+    fun startSync(): LiveData<WorkInfo>? {
+        syncStatus = HotelSyncWorker.start()
+        return syncStatus
     }
 }

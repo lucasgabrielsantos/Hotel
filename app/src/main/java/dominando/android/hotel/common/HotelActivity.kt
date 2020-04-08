@@ -20,7 +20,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class HotelActivity : AppCompatActivity(),
     HotelListFragment.OnHotelClickListener,
     SearchView.OnQueryTextListener,
-    MenuItem.OnActionExpandListener {
+    MenuItem.OnActionExpandListener, BaseActivity() {
 
     private val viewModel: HotelListViewModel by viewModel()
     private var searchView: SearchView? = null

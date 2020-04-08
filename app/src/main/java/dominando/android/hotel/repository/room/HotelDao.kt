@@ -3,9 +3,8 @@ package dominando.android.hotel.repository.room
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import dominando.android.hotel.model.Hotel
-import dominando.android.hotel.repository.sqlite.COLUMN_ID
-import dominando.android.hotel.repository.sqlite.COLUMN_NAME
-import dominando.android.hotel.repository.sqlite.TABLE_HOTEL
+import dominando.android.hotel.repository.http.Status
+import dominando.android.hotel.repository.sqlite.*
 
 @Dao
 interface HotelDao {
@@ -21,9 +20,17 @@ interface HotelDao {
     @Query("SELECT * FROM $TABLE_HOTEL WHERE $COLUMN_ID = :id")
     fun hotelById(id: Long): LiveData<Hotel>
 
-    @Query(
-        """SELECT * FROM $TABLE_HOTEL
-            WHERE $COLUMN_NAME LIKE :query ORDER BY $COLUMN_NAME"""
-    )
-    fun search(query: String): LiveData<List<Hotel>>
+    @Query("""SELECT * FROM $TABLE_HOTEL
+            WHERE $COLUMN_STATUS != ${Status.DELETE}
+            AND $COLUMN_NAME LIKE :query
+            ORDER BY $COLUMN_NAME""")
+    fun search(query : String): LiveData<List<Hotel>>
+
+    @Query("""SELECT * FROM $TABLE_HOTEL
+            WHERE $COLUMN_SERVER_ID = :serverId""")
+    fun hotelByServerId(serverId : Long): Hotel?
+
+    @Query("""SELECT * FROM $TABLE_HOTEL
+            WHERE $COLUMN_STATUS != ${Status.OK}""")
+    fun pending(): List<Hotel>
 }
