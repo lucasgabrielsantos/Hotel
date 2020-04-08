@@ -2,7 +2,7 @@ package dominando.android.hotel.repository
 
 import dominando.android.hotel.model.Hotel
 
-interface HotelRepository{
+interface HotelRepository {
 
     fun save(hotel: Hotel)
 
