@@ -1,7 +1,6 @@
 package dominando.android.hotel.repository.http
 
 import android.util.Log
-import dominando.android.hotel.auth.Auth
 import dominando.android.hotel.model.Hotel
 import dominando.android.hotel.repository.HotelRepository
 import dominando.android.hotel.repository.imagefiles.FindHotelPicture
@@ -11,10 +10,7 @@ import okhttp3.RequestBody
 class HotelHttp(private val service : HotelHttpApiRetrofit,
                 private val repository: HotelRepository,
                 private val pictureFinder: FindHotelPicture,
-                private val auth: Auth) {
-
-    private val currentUser: String
-        get() = auth.getUserId() ?: ""
+                private val currentUser: String) {
 
     fun synchronizeWithServer() {
         if (currentUser.isBlank()){
@@ -119,11 +115,6 @@ class HotelHttp(private val service : HotelHttpApiRetrofit,
         } catch (error: Throwable) {
             NoUploadPerformed
         }
-    }
-
-    fun sendRegistrationToken(token: String): Boolean {
-        return currentUser.isNotBlank() && token.isNotBlank() &&
-                service.sendRegistrationId(currentUser, token).execute().isSuccessful
     }
 
     companion object {

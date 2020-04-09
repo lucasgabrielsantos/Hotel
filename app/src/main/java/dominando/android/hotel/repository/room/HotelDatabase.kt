@@ -5,9 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import dominando.android.hotel.model.Hotel
-import dominando.android.hotel.repository.sqlite.DATABASE_NAME
-import dominando.android.hotel.repository.sqlite.DATABASE_VERSION
-
+import dominando.android.hotel.repository.sqlite.*
 
 @Database(entities = [Hotel::class], version = DATABASE_VERSION)
 abstract class HotelDatabase : RoomDatabase() {
@@ -22,14 +20,12 @@ abstract class HotelDatabase : RoomDatabase() {
                 instance = Room.databaseBuilder(
                     context.applicationContext,
                     HotelDatabase::class.java,
-                    DATABASE_NAME
-                )
+                    DATABASE_NAME)
                     .allowMainThreadQueries()
                     .build()
             }
             return instance as HotelDatabase
         }
-
         fun destroyInstance() {
             instance = null
         }

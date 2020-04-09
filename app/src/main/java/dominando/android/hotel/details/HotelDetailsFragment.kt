@@ -7,10 +7,14 @@ import androidx.appcompat.widget.ShareActionProvider
 import androidx.core.view.MenuItemCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import dominando.android.hotel.R
 import dominando.android.hotel.form.HotelFormFragment
 import dominando.android.hotel.model.Hotel
+import dominando.android.hotel.repository.http.HotelHttp
 import kotlinx.android.synthetic.main.fragment_hotel_details.*
+import kotlinx.android.synthetic.main.fragment_hotel_details.rtbRating
+import kotlinx.android.synthetic.main.fragment_hotel_form.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HotelDetailsFragment : Fragment() {
@@ -46,16 +50,16 @@ class HotelDetailsFragment : Fragment() {
         })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.hotel_details, menu)
-        val shareItem = menu?.findItem(R.id.action_share)
+        inflater.inflate(R.menu.hotel_details, menu)
+        val shareItem = menu.findItem(R.id.action_share)
         shareActionProvider = MenuItemCompat.getActionProvider(shareItem) as? ShareActionProvider
         setShareIntent()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId == R.id.action_edit) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_edit) {
             HotelFormFragment
                 .newInstance(hotel?.id ?: 0)
                 .open(requireFragmentManager())
@@ -77,6 +81,13 @@ class HotelDetailsFragment : Fragment() {
         txtName.text = hotel.name
         txtAddress.text = hotel.address
         rtbRating.rating = hotel.rating
+        var photoUrl = hotel.photoUrl
+        if (photoUrl.isNotEmpty()) {
+            if (!photoUrl.contains("content://")) {
+                photoUrl = HotelHttp.BASE_URL + hotel.photoUrl
+            }
+            Glide.with(imgPhoto.context).load(photoUrl).into(imgPhoto)
+        }
     }
 
     private fun errorHotelNotFound() {

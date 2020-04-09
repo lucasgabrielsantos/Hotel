@@ -1,9 +1,7 @@
 package dominando.android.hotel.list
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import androidx.work.WorkInfo
 import dominando.android.hotel.common.SingleLiveEvent
 import dominando.android.hotel.model.Hotel
@@ -59,7 +57,6 @@ class HotelListViewModel(
             showDetailsCommand.value = hotel
         }
     }
-
     private fun toggleHotelSelected(hotel: Hotel) {
         val existing = selectedItems.find { it.id == hotel.id }
         if (existing == null) {
@@ -68,11 +65,9 @@ class HotelListViewModel(
             selectedItems.removeAll { it.id == hotel.id }
         }
     }
-
     fun search(term: String = "") {
         searchTerm.value = term
     }
-
     fun setInDeleteMode(deleteMode: Boolean) {
         if (!deleteMode) {
             selectionCount.value = 0
@@ -93,7 +88,6 @@ class HotelListViewModel(
         setInDeleteMode(false)
         showDeletedMessage.value = deletedItems.size
     }
-
     fun undoDelete() {
         if (deletedItems.isNotEmpty()) {
             for (hotel in deletedItems) {

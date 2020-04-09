@@ -2,15 +2,25 @@
     android:id="@+id/scrollView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgPhoto"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:background="@android:color/darker_gray" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilName"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtName"
                 android:layout_width="match_parent"
@@ -19,10 +29,12 @@
                 android:imeOptions="actionNext"
                 android:inputType="textCapWords" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilAddress"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtAddress"
                 android:layout_width="match_parent"
@@ -31,6 +43,7 @@
                 android:imeOptions="actionDone"
                 android:inputType="textCapWords" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <TextView
             android:id="@+id/txtRating"
             android:layout_width="wrap_content"
@@ -38,6 +51,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/form_label_rating"
             android:textColor="@color/colorAccent" />
+
         <RatingBar
             android:id="@+id/rtbRating"
             android:layout_width="wrap_content"
@@ -45,5 +59,12 @@
             android:numStars="5"
             android:progressTint="@color/colorAccent"
             android:stepSize="0.5" />
+
+        <Button
+            android:id="@+id/btnSaveHotelForm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/salvar_hotel"
+            android:inputType="textCapWords"/>
     </LinearLayout>
 </ScrollView>

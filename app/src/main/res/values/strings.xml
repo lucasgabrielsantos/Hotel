@@ -21,6 +21,7 @@
     <string name="BemVindo"> Bem Vindo ao App de \n Hotéis</string>
     <string name="error_login_failed">Falha ao efetuar login</string>
     <string name="error_play_services_not_supported">Google Play Services não disponível</string>
+    <string name="salvar_hotel">Salvar Hotel</string>
 
 
     <plurals name="list_hotel_selected">
