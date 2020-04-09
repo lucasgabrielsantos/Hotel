@@ -11,21 +11,29 @@ interface HotelHttpApiRetrofit {
     fun listHotels(@Path("user") user: String): Call<List<Hotel>>
 
     @GET("$WEB_SERVICE/{user}/{hotelId}")
-    fun hotelById(@Path("user") user: String,
-                  @Path("hotelId") id: Long): Call<Hotel?>
+    fun hotelById(
+        @Path("user") user: String,
+        @Path("hotelId") id: Long
+    ): Call<Hotel?>
 
     @POST("$WEB_SERVICE/{user}")
-    fun insert(@Path("user") user: String,
-               @Body hotel: Hotel): Call<IdResult>
+    fun insert(
+        @Path("user") user: String,
+        @Body hotel: Hotel
+    ): Call<IdResult>
 
     @PUT("$WEB_SERVICE/{user}/{hotelId}")
-    fun update(@Path("user") user: String,
-               @Path("hotelId") id: Long,
-               @Body hotel: Hotel): Call<IdResult>
+    fun update(
+        @Path("user") user: String,
+        @Path("hotelId") id: Long,
+        @Body hotel: Hotel
+    ): Call<IdResult>
 
     @DELETE("$WEB_SERVICE/{user}/{hotelId}")
-    fun delete(@Path("user") user: String,
-               @Path("hotelId") id: Long): Call<IdResult>
+    fun delete(
+        @Path("user") user: String,
+        @Path("hotelId") id: Long
+    ): Call<IdResult>
 
     @Multipart
     @POST(UPLOAD)

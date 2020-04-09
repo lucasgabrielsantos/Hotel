@@ -7,13 +7,15 @@ import dominando.android.hotel.repository.imagefiles.FindHotelPicture
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
-class HotelHttp(private val service : HotelHttpApiRetrofit,
-                private val repository: HotelRepository,
-                private val pictureFinder: FindHotelPicture,
-                private val currentUser: String) {
+class HotelHttp(
+    private val service: HotelHttpApiRetrofit,
+    private val repository: HotelRepository,
+    private val pictureFinder: FindHotelPicture,
+    private val currentUser: String
+) {
 
     fun synchronizeWithServer() {
-        if (currentUser.isBlank()){
+        if (currentUser.isBlank()) {
             throw SecurityException("Usuário não autenticado")
         } else {
             sendPendingData()

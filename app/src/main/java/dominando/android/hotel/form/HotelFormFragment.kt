@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.view.inputmethod.EditorInfo
-import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
@@ -51,7 +49,8 @@ class HotelFormFragment : DialogFragment() {
             selectPhoto()
         }
 
-        btnSaveHotelForm.setOnClickListener { saveHotel()
+        btnSaveHotelForm.setOnClickListener {
+            saveHotel()
             dialog.dismiss()
         }
 

@@ -20,17 +20,23 @@ interface HotelDao {
     @Query("SELECT * FROM $TABLE_HOTEL WHERE $COLUMN_ID = :id")
     fun hotelById(id: Long): LiveData<Hotel>
 
-    @Query("""SELECT * FROM $TABLE_HOTEL
+    @Query(
+        """SELECT * FROM $TABLE_HOTEL
             WHERE $COLUMN_STATUS != ${Status.DELETE}
             AND $COLUMN_NAME LIKE :query
-            ORDER BY $COLUMN_NAME""")
-    fun search(query : String): LiveData<List<Hotel>>
+            ORDER BY $COLUMN_NAME"""
+    )
+    fun search(query: String): LiveData<List<Hotel>>
 
-    @Query("""SELECT * FROM $TABLE_HOTEL
-            WHERE $COLUMN_SERVER_ID = :serverId""")
-    fun hotelByServerId(serverId : Long): Hotel?
+    @Query(
+        """SELECT * FROM $TABLE_HOTEL
+            WHERE $COLUMN_SERVER_ID = :serverId"""
+    )
+    fun hotelByServerId(serverId: Long): Hotel?
 
-    @Query("""SELECT * FROM $TABLE_HOTEL
-            WHERE $COLUMN_STATUS != ${Status.OK}""")
+    @Query(
+        """SELECT * FROM $TABLE_HOTEL
+            WHERE $COLUMN_STATUS != ${Status.OK}"""
+    )
     fun pending(): List<Hotel>
 }

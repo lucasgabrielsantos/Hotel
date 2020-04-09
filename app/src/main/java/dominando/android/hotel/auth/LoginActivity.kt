@@ -1,21 +1,21 @@
-//package dominando.android.hotel.auth
-//
-//import android.app.Activity
-//import android.content.Intent
-//import android.os.Bundle
-//import android.widget.Toast
-//import androidx.appcompat.app.AppCompatActivity
+package dominando.android.hotel.auth
+
+import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 //import com.google.android.gms.auth.api.signin.GoogleSignIn
 //import com.google.android.gms.common.ConnectionResult
 //import com.google.android.gms.common.GoogleApiAvailability
 //import com.google.android.gms.common.api.ApiException
 //import com.google.firebase.messaging.FirebaseMessaging
-//import dominando.android.hotel.R
-//import dominando.android.hotel.common.HotelActivity
-//import kotlinx.android.synthetic.main.activity_login.*
-//import org.koin.android.ext.android.inject
-//
-//class LoginActivity : AppCompatActivity() {
+import dominando.android.hotel.R
+import dominando.android.hotel.common.HotelActivity
+import kotlinx.android.synthetic.main.activity_login.*
+import org.koin.android.ext.android.inject
+
+class LoginActivity : AppCompatActivity() {
 //    private val authManager: AuthManager by inject()
 //
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +65,7 @@
 //                finish()
 //            }
 //        }
-//    }
+   }
 //    companion object {
 //        private const val REQUEST_SIGN_IN = 1000
 //        private const val REQUEST_PLAY_SERVICES = 2000

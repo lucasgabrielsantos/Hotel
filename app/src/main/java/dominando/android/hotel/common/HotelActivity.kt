@@ -1,12 +1,12 @@
 package dominando.android.hotel.common
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import dominando.android.hotel.*
+import dominando.android.hotel.R
 import dominando.android.hotel.details.HotelDetailsActivity
 import dominando.android.hotel.details.HotelDetailsFragment
 import dominando.android.hotel.form.HotelFormFragment
@@ -16,7 +16,7 @@ import dominando.android.hotel.model.Hotel
 import kotlinx.android.synthetic.main.activity_hotel.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HotelActivity: AppCompatActivity(),
+class HotelActivity : AppCompatActivity(),
     HotelListFragment.OnHotelClickListener,
     SearchView.OnQueryTextListener,
     MenuItem.OnActionExpandListener {
@@ -85,7 +85,7 @@ class HotelActivity: AppCompatActivity(),
         return true
     }
 
-    private fun isTablet()  = resources.getBoolean(R.bool.tablet)
+    private fun isTablet() = resources.getBoolean(R.bool.tablet)
 
     private fun isSmartphone() = resources.getBoolean(R.bool.smartphone)
 

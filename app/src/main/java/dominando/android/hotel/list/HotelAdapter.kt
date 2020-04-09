@@ -9,9 +9,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import dominando.android.hotel.R
 import dominando.android.hotel.model.Hotel
-import kotlinx.android.synthetic.main.fragment_hotel_details.view.*
 import kotlinx.android.synthetic.main.item_hotel.view.*
-import kotlinx.android.synthetic.main.item_hotel.view.txtName
 
 class HotelAdapter(context: Context, hotels: List<Hotel>) :
     ArrayAdapter<Hotel>(context, 0, hotels) {

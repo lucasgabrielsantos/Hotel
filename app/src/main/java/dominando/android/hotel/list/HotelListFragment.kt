@@ -11,10 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.WorkInfo
 import androidx.work.WorkInfo.State
-
 import com.google.android.material.snackbar.Snackbar
-import dominando.android.hotel.model.Hotel
 import dominando.android.hotel.R
+import dominando.android.hotel.model.Hotel
 import kotlinx.android.synthetic.main.fragment_list_hotel.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -29,7 +28,11 @@ class HotelListFragment : ListFragment(),
         swipeRefresh.isRefreshing = (it.state == State.RUNNING || it.state == State.ENQUEUED)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_list_hotel, container, false)
     }
 
@@ -39,11 +42,14 @@ class HotelListFragment : ListFragment(),
         swipeRefresh.setColorSchemeResources(
             R.color.colorPrimary,
             R.color.colorAccent,
-            R.color.colorPrimaryDark)
+            R.color.colorPrimaryDark
+        )
     }
+
     override fun onRefresh() {
         startSync()
     }
+
     private fun startSync() {
         viewModel.syncStatus?.removeObserver(syncObserver)
         viewModel.startSync()?.observe(viewLifecycleOwner, syncObserver)
@@ -117,8 +123,10 @@ class HotelListFragment : ListFragment(),
         viewModel.search(text)
     }
 
-    override fun onItemLongClick(parent: AdapterView<*>?, view: View?,
-                                 position: Int, id: Long): Boolean {
+    override fun onItemLongClick(
+        parent: AdapterView<*>?, view: View?,
+        position: Int, id: Long
+    ): Boolean {
         val consumed = (actionMode == null)
         if (consumed) {
             val hotel = parent?.getItemAtPosition(position) as Hotel
@@ -148,7 +156,8 @@ class HotelListFragment : ListFragment(),
 
     private fun updateSelectionCountText(count: Int) {
         view?.post {
-            actionMode?.title = resources.getQuantityString(R.plurals.list_hotel_selected, count, count)
+            actionMode?.title =
+                resources.getQuantityString(R.plurals.list_hotel_selected, count, count)
         }
     }
 
@@ -164,9 +173,11 @@ class HotelListFragment : ListFragment(),
     }
 
     private fun showMessageHotelsDeleted(count: Int) {
-        Snackbar.make(listView,
+        Snackbar.make(
+            listView,
             getString(R.string.message_hotels_deleted, count),
-            Snackbar.LENGTH_LONG)
+            Snackbar.LENGTH_LONG
+        )
             .setAction(R.string.undo) {
                 viewModel.undoDelete()
             }

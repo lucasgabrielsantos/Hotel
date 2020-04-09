@@ -27,13 +27,15 @@ class HotelDetailsActivity : AppCompatActivity() {
             )
             .commit()
     }
+
     companion object {
         private const val EXTRA_HOTEL_ID = "hotel_id"
         fun open(activity: Activity, hotelId: Long) {
             activity.startActivityForResult(
                 Intent(activity, HotelDetailsActivity::class.java).apply {
                     putExtra(EXTRA_HOTEL_ID, hotelId)
-                }, 0)
+                }, 0
+            )
         }
     }
 }

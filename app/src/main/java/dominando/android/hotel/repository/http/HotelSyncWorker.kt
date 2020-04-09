@@ -6,8 +6,8 @@ import androidx.work.*
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 
-class HotelSyncWorker(context: Context, workerParams: WorkerParameters)
-    : Worker(context, workerParams), KoinComponent {
+class HotelSyncWorker(context: Context, workerParams: WorkerParameters) :
+    Worker(context, workerParams), KoinComponent {
     override fun doWork(): Result {
         val hotelHttp: HotelHttp by inject()
         return try {
@@ -17,6 +17,7 @@ class HotelSyncWorker(context: Context, workerParams: WorkerParameters)
             Result.failure()
         }
     }
+
     companion object {
         fun start(): LiveData<WorkInfo> {
             val workManager = WorkManager.getInstance()

@@ -11,7 +11,8 @@ import java.io.FileOutputStream
 
 class ImageGalleryPictureFinder(
     private val uploadsDir: File,
-    private val resolver: ContentResolver) : FindHotelPicture {
+    private val resolver: ContentResolver
+) : FindHotelPicture {
 
     override fun pictureFile(hotel: Hotel): PictureToUpload {
         val file = File(uploadsDir, "${hotel.id}.jpg")
@@ -26,6 +27,7 @@ class ImageGalleryPictureFinder(
             )
         }
     }
+
     private fun saveImageFromUri(origin: Uri, destination: File) {
         try {
             if (!destination.exists()) {

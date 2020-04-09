@@ -13,8 +13,10 @@ class AboutDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val listener = DialogInterface.OnClickListener { _, i ->
             if (i == DialogInterface.BUTTON_NEGATIVE) {
-                val intent = Intent(Intent.ACTION_VIEW,
-                    Uri.parse("https://www.linkedin.com/in/lucas-gabriel-b2483913a/"));
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://www.linkedin.com/in/lucas-gabriel-b2483913a/")
+                )
                 startActivity(intent)
             }
         }
